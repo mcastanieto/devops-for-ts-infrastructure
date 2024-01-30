@@ -5,6 +5,7 @@ import { getExistingCertificate } from './src/acm/getCertificate';
 import { getARN } from './src/utils/getARN';
 import { createBucketPolicy } from './src/s3/bucketPolicy';
 import { requestRewriterLambda } from './src/lambda@edge/requestRewriter';
+import { createFrontendPipelineUser } from './src/iam/pipelineUser';
 
 // Import the program's configuration settings.
 const config = new pulumi.Config();
@@ -121,9 +122,12 @@ const record = new aws.route53.Record(domainName, {
   ],
 });
 
+const pipelineUser = createFrontendPipelineUser(bucket, cdn);
+
 const bucketPolicyDocument = createBucketPolicy({
   bucket,
   distribution: cdn,
+  pipelineUser,
 });
 
 const attachedBucketPolicy = new aws.s3.BucketPolicy('s3bucketPolicy', {

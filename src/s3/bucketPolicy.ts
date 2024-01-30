@@ -7,9 +7,11 @@ import { User } from '@pulumi/aws/iam';
 export const createBucketPolicy = ({
   bucket,
   distribution,
+  pipelineUser,
 }: {
   bucket: Bucket;
   distribution: Distribution;
+  pipelineUser: User;
 }) =>
   aws.iam.getPolicyDocumentOutput({
     statements: [
@@ -29,6 +31,16 @@ export const createBucketPolicy = ({
             variable: 'AWS:SourceArn',
           },
         ],
+      },
+      {
+        principals: [
+          {
+            type: 'AWS',
+            identifiers: [pipelineUser.arn],
+          },
+        ],
+        actions: ['s3:PutObject', 's3:ListBucket', 's3:DeleteObject'],
+        resources: [bucket.arn, pulumi.interpolate`${bucket.arn}/*`],
       },
     ],
   });
