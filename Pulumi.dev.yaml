@@ -1,7 +1,7 @@
 config:
   aws:region: us-east-1
   infrastructure:domain: umnum.net
-  infrastructure:errorDocument: error.html
+  infrastructure:errorDocument: 404.html
   infrastructure:indexDocument: index.html
   infrastructure:path: ./www
   infrastructure:subdomain: dev
