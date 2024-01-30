@@ -1,6 +1,7 @@
 {
   "name": "infrastructure",
   "devDependencies": {
+    "@types/aws-lambda": "8.10.133",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "6.19.1",
     "@typescript-eslint/parser": "6.19.1",

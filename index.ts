@@ -4,6 +4,7 @@ import * as synced_folder from '@pulumi/synced-folder';
 import { getExistingCertificate } from './src/acm/getCertificate';
 import { getARN } from './src/utils/getARN';
 import { createBucketPolicy } from './src/s3/bucketPolicy';
+import { requestRewriterLambda } from './src/lambda@edge/requestRewriter';
 
 // Import the program's configuration settings.
 const config = new pulumi.Config();
@@ -40,17 +41,6 @@ const publicAccessBlock = new aws.s3.BucketPublicAccessBlock(
     ignorePublicAcls: true,
     restrictPublicBuckets: true,
   }
-);
-
-// Use a synced folder to manage the files of the website.
-const bucketFolder = new synced_folder.S3BucketFolder(
-  'bucket-folder',
-  {
-    path: path,
-    bucketName: bucket.bucket,
-    acl: 'public-read',
-  },
-  { dependsOn: [ownershipControls, publicAccessBlock] }
 );
 
 const certificate = getExistingCertificate(domain);
@@ -93,6 +83,12 @@ const cdn = new aws.cloudfront.Distribution('cdn', {
         forward: 'all',
       },
     },
+    lambdaFunctionAssociations: [
+      {
+        eventType: 'origin-request',
+        lambdaArn: requestRewriterLambda.qualifiedArn,
+      },
+    ],
   },
   priceClass: 'PriceClass_100',
   customErrorResponses: [
