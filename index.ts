@@ -6,6 +6,7 @@ import { getARN } from './src/utils/getARN';
 import { createBucketPolicy } from './src/s3/bucketPolicy';
 import { requestRewriterLambda } from './src/lambda@edge/requestRewriter';
 import { createFrontendPipelineUser } from './src/iam/pipelineUser';
+import { createBackend } from './src/backend/backend';
 
 // Import the program's configuration settings.
 const config = new pulumi.Config();
@@ -134,6 +135,8 @@ const attachedBucketPolicy = new aws.s3.BucketPolicy('s3bucketPolicy', {
   bucket: bucket.id,
   policy: bucketPolicyDocument.json,
 });
+
+export const { repoName } = createBackend();
 
 // Export the URLs and hostnames of the bucket and distribution.
 export const originURL = pulumi.interpolate`http://${bucket.websiteEndpoint}`;

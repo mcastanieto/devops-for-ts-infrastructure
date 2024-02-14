@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@pulumi/aws": "^6.0.2",
+    "@pulumi/awsx": "^2.5.0",
     "@pulumi/pulumi": "^3.49.0",
     "@pulumi/synced-folder": "^0.0.9",
+    "awsx": "^1.4.2",
     "typescript": "^4.0.0"
   },
   "scripts": {
