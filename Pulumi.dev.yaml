@@ -5,3 +5,7 @@ config:
   infrastructure:indexDocument: index.html
   infrastructure:path: ./www
   infrastructure:subdomain: dev
+  api:containerPort: 1337
+  api:containerName: dev-backend-container
+  api:cpu: 256
+  api:memory: 512

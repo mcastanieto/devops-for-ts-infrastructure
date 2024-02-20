@@ -136,9 +136,17 @@ const attachedBucketPolicy = new aws.s3.BucketPolicy('s3bucketPolicy', {
   policy: bucketPolicyDocument.json,
 });
 
-export const { repoName } = createBackend();
+export const {
+  repoName,
+  serviceName,
+  clusterName,
+  containerName,
+  loadBalancerUrl,
+  imageUri,
+} = createBackend();
 
 // Export the URLs and hostnames of the bucket and distribution.
+export const imageURI = imageUri;
 export const originURL = pulumi.interpolate`http://${bucket.websiteEndpoint}`;
 export const originHostname = bucket.websiteEndpoint;
 export const cdnURL = pulumi.interpolate`https://${cdn.domainName}`;
